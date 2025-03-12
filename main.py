@@ -99,9 +99,17 @@ def pegar_infos(nome_arquivo, valores, progresso, lista_arquivos, valores_erros)
                 if valor_unitario_tributado != 'Não informado':
                     valor_unitario_tributado = valor_unitario_tributado.replace('.', ',')
                 ind_tot = produto['prod'].get('indTot', 'Não informado')
-            
+                	
+                csosn = 'Não informado'
+
+                regime_tributario = infos_nf['emit'].get('CRT', 'Não informado')
+
+                if regime_tributario == '1' or regime_tributario == '2':
+                    icms = produto['imposto'].get('ICMS', {})
+                    for chave, valor in icms.items():
+                        if isinstance(valor, dict):
+                            csosn = valor.get('CSOSN', csosn)
                 
-                csosn = produto['prod'].get('CSOSN', 'Não informado')
                 icms = produto['imposto'].get('ICMS', {})
                 icms_original = 'Não informado'
                 icms_cst = 'Não informado'
@@ -143,8 +151,6 @@ def pegar_infos(nome_arquivo, valores, progresso, lista_arquivos, valores_erros)
                         ipi_vipi = valor.get('vIPI', ipi_vipi)
                         if ipi_vipi != 'Não informado':
                             ipi_vipi = ipi_vipi.replace('.', ',')
-
-
 
                 pis = produto['imposto'].get('PIS', {})
                 pis_cst = 'Não informado'
@@ -267,7 +273,7 @@ def selecionar_pasta(progresso):
     usar_icone(mensagem)
 
     mensagem.setStyleSheet("""
-        QMessageBox {
+        * {
             background-color: #001F3F; 
             color: #ffffff; 
             font-size: 16px; 
